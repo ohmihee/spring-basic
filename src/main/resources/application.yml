@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: admin
+      password: admin
+      database: basic
+      authentication-database: admin
+#      uri: mongodb://admin:admin@localhost:27017/basic
+  servlet:
+    multipart:
+      max-file-size: 256MB
+      max-request-size: 1256MB
+      enabled: true
