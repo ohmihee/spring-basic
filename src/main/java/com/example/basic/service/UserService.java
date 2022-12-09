@@ -52,4 +52,8 @@ public class UserService {
     public User findUserByUserName(String UserName) {
         return this.userRespository.findByUserNameRegex(UserName);
     }
+
+    public User modifyUserNick(User user) {
+        return this.userRespository.save(user);
+    }
 }

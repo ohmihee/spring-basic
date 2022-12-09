@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document("User")
-public class User {
+public class User extends BaseTimeEntity{
 
     @Id
     private String id;

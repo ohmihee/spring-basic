@@ -4,6 +4,7 @@ import com.example.basic.entity.User;
 import com.example.basic.service.FilesService;
 import com.example.basic.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import org.bson.types.Binary;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -25,14 +26,22 @@ import java.util.List;
 public class UserController {
     //https://goddaehee.tistory.com/203
 
+
     private final UserService userService;
-    private final FilesService filesService;
+    //private final FilesService filesService;
 // https://jaimemin.tistory.com/2072
     @PostMapping(value="/register", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity addUser(HttpServletRequest request, @RequestPart(value="user") User user, @RequestPart(value="file", required=false) MultipartFile file) throws IOException {
         this.userService.register(user, file);
         return ResponseEntity.ok().header("result","success").body(null);
     }
+
+    @PutMapping(value="/update/user")
+    public User updateUser(@RequestBody User user) {
+        return this.userService.modifyUserNick(user);
+    }
+
+
 
     @PostMapping(value="/register/profile-image")
     public void addUserProfileImage() {
