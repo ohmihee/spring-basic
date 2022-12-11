@@ -5,21 +5,20 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
+@Document("User")
 public abstract class BaseTimeEntity {
     @CreatedDate
-    private Long createDateTime = null;
+    private Long createDateTime;
 
     @LastModifiedDate
     private Long lastModifiedDate;
 
-    protected BaseTimeEntity () {
-        if (createDateTime == null) {
-            this.createDateTime = System.currentTimeMillis();
-        }
-        this.lastModifiedDate = System.currentTimeMillis();
-    }
-
+//    protected BaseTimeEntity () {
+//        this.createDateTime = System.currentTimeMillis();
+//        this.lastModifiedDate = System.currentTimeMillis();
+//    }
 }

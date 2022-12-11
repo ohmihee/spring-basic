@@ -40,14 +40,10 @@ public class UserController {
     public User updateUser(@RequestBody User user) {
         return this.userService.modifyUserNick(user);
     }
-
-
-
     @PostMapping(value="/register/profile-image")
     public void addUserProfileImage() {
 
     }
-
 
     @GetMapping("/user/profile/{id}")
     public void findUserImage(@PathVariable String id) throws IOException {

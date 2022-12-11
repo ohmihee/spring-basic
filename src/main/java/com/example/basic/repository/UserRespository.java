@@ -9,3 +9,4 @@ public interface UserRespository extends MongoRepository<User, String> {
     User findByUserNameRegex(String userName);
     User findByNickNameRegex(String nickName);
 }
+

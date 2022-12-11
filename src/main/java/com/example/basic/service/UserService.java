@@ -54,6 +54,8 @@ public class UserService {
     }
 
     public User modifyUserNick(User user) {
-        return this.userRespository.save(user);
+        User newUser = this.userRespository.findById(user.getId()).get();
+        newUser.setNickName(user.getNickName());
+        return this.userRespository.save(newUser);
     }
 }
