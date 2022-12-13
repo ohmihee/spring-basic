@@ -9,7 +9,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class MemberService {
-    private final MemberRespository memberRespository = new MemoryMemberRepository();
+    //private final MemberRespository memberRespository = new MemoryMemberRepository();
+
+    private final MemberRespository memberRespository;
+
+    public MemberService(MemberRespository memberRespository) {
+        this.memberRespository = memberRespository;
+    }
+
     /** 회원 가입 ================================*/
     public Long join(Member member) {
         // 동일한 이름의 중복 회원 검증
