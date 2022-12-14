@@ -13,3 +13,4 @@ spring:
       max-file-size: 256MB
       max-request-size: 1256MB
       enabled: true
+
