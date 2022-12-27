@@ -1,18 +1,48 @@
-# spring-basic
 # spring boot
 : 스프링 부트는 웹서버를 손쉽게 구축할 수 있도록 여러 편리한 기능을 제공해주는 프레임워크이다.
 
+# 스프링 빈을 등록하는 두 가지 방법
+## Q) 빈(Bean)이란?
+1. 컴포넌트 스캔을 통한 자동 의존관계 설정 방식
+위의 방식은 어노테이션 등을 사용하는 방식을 의미한다.
+ex) 
+@Controller
+public class MemberController {
+    private MemberService memberService;
+}
+2. 자바 코드를 통해 직접 스프링 빈을 등록하는 방식
+
+
+
+## gradle
+: gradle은 Groovy를 기반으로 한 빌드 도구로 빌드, 테스트, 배포 등을 자동화하였다.
+- Projects
+: gradle에서 빌드되는 것을 의미한다. 프로젝트는 root directory에 위치한 build.gradle이라는 이름을 가진 build scripts를 통해 프로젝트의 빌드가 이루어진다.
+- Build 단계
+
+- tasks
 ## 파일 정보
 * init.gradle
 : 빌드시에 가장 먼저 실행되는 파일로, 프로젝트 실행 환경 설정과 사용자 정보의 내용을 담고 있다.
 * settings.gradle
-: 빌드 대상 프로젝트를 설정하는 파일이다. 예를 들어 한 폴더에 여러 개의 프로젝트가 존재하는 경우에 실제 빌드 대상이 될 프로젝트를 설정하여 주는 파일이다.
+: gradle은 한 프로젝트에 하위의 여러개의 프로젝트를 둘 수 있는데, 이때 settings.gradle은 root프로젝트와 하위 프로젝트에 대해 설정할 수 있도록 해주는 파일이다.
+때문에 한 디렉토리에서 여러 프로젝트를 빌드하는 경우에는 반드시 settings.gradle파일을 root 디렉토리 경로에 위치하고 있어야 한다.이 때 settings.gradle 파일은 반드시 root project에 위치하여야 한다. ( settings.gradle 파일이 존재하지 않는 경우에 gradle은 자동으로 single project로 인식하고 빌드한다. )
+ex) sttings.gradle 파일
+rootProject.name = 'rootProject'
+include 'subProject'
+
 * application.properties(or application.yml)
 : 파일은 데이터베이스 설정 등 프로젝트 환경 관련 설정을 담당하는 파일이다.
 * build.gradle 
-: gradle은 Groovy를 기반으로 한 빌드 도구로써, build.gradle 은 라이브러리 파일 등 빌드 관련 설정을 해주는 파일이다. 해당 파일은 plugins, dependencies, repository 등에 대한 정보를 담고 있다.
-- runtimeOnly
-- compileOnly
+: 라이브러리 파일 등 빌드 관련 설정을 해주는 파일이다. 해당 파일은 plugins, dependencies, repository 등에 대한 정보를 담고 있다.
+allprojects{}
+configurations.all{}
+resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+def 
+: 선언하는 것인 듯 한다.
+subprojects{}
+mavenCentral()
+compileJava.options.encoding = ''
 
 # Q) 서비스를 별도로 구분하여 두는 이유?
 : 반복적으로 사용되는 기능에 대하여 컨트롤러가 아닌 별도의 서비스 파일을 생성하여 로직을 작성함으로써 반복적인 코드를 줄이기 위함이다.
