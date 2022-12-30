@@ -524,3 +524,17 @@ public class Main {
 
 # 참고
 mavenLocal이용하기 https://velog.io/@haerong22/Gradle-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EB%A7%8C%EB%93%A4%EA%B3%A0-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0Maven-Local-Repository#3-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+
+https://medium.com/webeveloper/enum%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%9C-%EC%83%81%EC%88%98%EA%B0%92-%EA%B4%80%EB%A6%AC-a3e3fb73eae1
+https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/
+https://mkyong.com/spring-boot/spring-boot-spring-data-mongodb-example/
+https://engineering.linecorp.com/ko/blog/mono-repo-multi-project-gradle-plugin/
+https://velog.io/@hanblueblue/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B83-2.-MongoRepository-%EC%9D%B4%EC%9A%A9%ED%95%98%EA%B8%B0
+https://www.programcreek.com/java-api-examples/org.apache.http.NameValuePair
+https://github.com/selimyanat/board-management-tool/blob/main/src/main/java/com/sy/board/management/core/domain/model/DomainEvent.java
+https://mkyong.com/tutorials/spring-boot-tutorials/
+https://mkyong.com/spring-boot/spring-rest-hello-world-example/
+https://www.appsloveworld.com/springboot/100/56/spring-data-mongodb-how-to-avoid-createdby-and-createddate-fields-update
+https://medium.com/geekculture/types-of-update-operations-in-mongodb-using-spring-boot-11d5d4ce88cf
+https://backtony.github.io/spring/2022-06-02-spring-module-1/
+
