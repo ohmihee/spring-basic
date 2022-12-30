@@ -1,3 +1,7 @@
+# 자바 참고 사이트
+https://mkyong.com/tutorials/spring-boot-tutorials/
+# 멀티 모듈 관련 참고 사이트
+https://backtony.github.io/spring/2022-06-02-spring-module-1/
 # spring boot
 : 스프링 부트는 웹서버를 손쉽게 구축할 수 있도록 여러 편리한 기능을 제공해주는 프레임워크이다.
 
@@ -265,3 +269,258 @@ kafka--------------------------
 kafka 경로 : C:\tool\kafka_2.13-3.2.0\bin\windows
 kafka 설명 : https://ifuwanna.tistory.com/487?category=931933
 kafka log-dirs 위치 : C:\tool\kafka_2.13-3.2.0\config
+
+
+# gradle multi-project 만들기
+1. 해당 프로젝트의 최상위 디렉토리에서 마우스 오른쪽 - new - module
+2. 최상위 디렉토리 경로에 위치한 settings.gradle 아래와 같이 변경 
+rootProject.name = '[최상위디렉토리명]'
+include '[하위모듈]'
+...
+ex) 
+--- settings.gradle ------------------------------------
+rootProject.name = 'board-back'
+include 'board'
+include 'board-user'
+3. 최상위 디렉토리 경로에 위치한 build.gradle 아래와 같이 작성
+--- build.gradle ----------------------------------------
+plugins {
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+ext {
+    lombokVersion = '1.18.20'
+    springVersion = '5.3.13'
+    springBootVersion = '2.6.2'
+}
+
+allprojects {
+    group 'com.mihee.board'
+    configurations {
+        all {
+            resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        }
+    }
+}
+
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+    // apply plugin: 'maven-publish'
+//    sourceCompatibility = '11'
+//    targetCompatibility = '11'
+    repositories {
+        // 라이브러리를 가져올 저장소를 설정해주는 듯 하다.
+        mavenLocal() // 로컬저장소
+        mavenCentral() // 원격저장소
+    }
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        }
+    }
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
+        implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+        compileOnly("org.projectlombok:lombok:${lombokVersion}")
+        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+        testImplementation("org.projectlombok:lombok:${lombokVersion}")
+        testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+        //
+    }
+    test {
+        useJUnitPlatform()
+    }
+    compileJava.options.encoding = 'UTF-8'
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}
+
+
+---------------------------------------------------------- 
+board-back
+해당 디렉토리의 루트 디렉토리에 존재하는 build.gradle을 포함하여 하위에 존재하는 모든 프로젝트에 포함되어 있는 build.gradle에 적용
+<!-- 
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+ext {
+    lombokVersion = '1.18.20'
+    springBootVersion = '2.6.2'
+    // ext의 역할은 무엇인가?
+    // ext는 환경 변수 등을 지정해주는 역할을 한다.
+}
+
+group = 'com.mihee.board'
+version = '0.0.1-SNAPSHOT'
+
+// gradle.build - allprojects/subprojects/project https://kotlinworld.com/324
+allprojects {
+    // 해당 디렉토리의 루트 디렉토리에 존재하는 build.gradle을 포함하여 하위에 존재하는 모든 프로젝트에 포함되어 있는 build.gradle에 적용
+    group 'com.mihee.board'
+    configurations {
+        all {
+            resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'maven-publish'
+
+    repositories {
+       maven {
+        credentials {
+            username = ''
+            password = ''
+            // credentials를 통해 사용자 설정을 해줄 수 도 있다.
+        }
+       }
+    }
+
+    // 디렉토리에 속한 하위의 프로젝트에 포함된 build.gradle에 적용
+    task taskPrintlnOnlyOneProject {
+        println "submodules println======="
+    }
+
+    dependencies {
+        compileOnly("org.projectlombok:lombok:${lombokVersion}")
+        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+        testImplementation("org.projectlombok:lombok:${lombokVersion}")
+        testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+        compileOnly('org.springframework.boot:spring-boot-starter-data-mongodb')
+        //
+        implementation 'com.grapecity.documents:gcexcel:5.2.3'
+    }
+
+}
+
+project(':board') {
+    apply plugin: 'spring-boot-starter-data-mongodb-reactive'
+    // board 프로젝트에만 적용한다.
+
+    // Could not find method implementation() for arguments [org.springframework.boot:spring-boot-starter-data-mongodb] on object of type org.gradle.api.internal.artifacts.dsl.dependencies.DefaultDependencyHandler.
+    // apply plungin: 부분을 추가해주면 에러가 사라진다.
+
+    // 특정 프로젝트에 대한 build.gradle에 적용
+    task taskPrintlnProjects {
+        println "submodule println===="
+    }
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
+        compile group: 'org.springframework.data', name: 'spring-data-mongodb', version: '2.0.5.RELEASE'
+        //
+    }
+}
+
+
+def test = 'test'
+// def는 보통 선언할 때 사용하는 것 같다.
+
+//repositories {
+//    mavenCentral()
+//}
+
+
+//tasks.named('test') {
+//    useJUnitPlatform()
+//} -->
+
+
+# gradle 멀티 프로젝트 생성
+1. gradle 기반의 프로젝트 생성
+2. 최상위 디렉토리 마우스 오른쪽 - new - module 
+- board-core // domain entity store 등 데이터베이스 관련 파일
+- board-api // 웹브라우저와 직접적으로 연동하는 컨트롤러 담당하는 부분
+- board-service // 실질적인 service 로직이 들어가는 부분
+- board-exception  // error 처리 관련 모듈 관리하는 부분
+하위 모듈 생성 생성
+settings.gradle 파일에 하위 모듈 include 코드 자동 추가됨
+rootProject.name = 'multi-project-01'
+```
+include 'board-core'
+include 'board-api' 
+include 'board-service' 
+include 'board-exception'
+```
+3. 기존 상위 프로젝트의 src 폴더는 삭제 
+4. 최상위 디렉토리 경로의 하위에 있는 build.gradle파일 수정
+plugins {
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+ext {
+    lombokVersion = '1.18.20'
+    springVersion = '5.3.13'
+    springBootVersion = '2.6.2'
+}
+
+allprojects {
+    group 'com.mihee.board'
+    configurations {
+        all {
+            resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
+        implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+        compileOnly("org.projectlombok:lombok:${lombokVersion}")
+        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+        testImplementation("org.projectlombok:lombok:${lombokVersion}")
+        testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+        //
+    }
+}
+
+에러
+Could not find method implementation() for arguments [org.springframework.boot:spring-boot-sta
+위와 같은 에러가 나는 경우에는 plugins { id 'io.spring.dependency-management' version '1.0.11.RELEASE' }와 subprojects에 apply plugin: 'io.spring.dependency-management'를 추가하여 준다.
+5. board-core모듈의 resources에 application.yml 파일 생성 후 기본 설정 내용 작성
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: admin
+      password: admin
+      database: board
+      authentication-database: admin
+
+6. board-api 모듈에 spring-boot 실행을 위한 main 함수 실행 코드 작성
+@SpringBootApplication
+@EnableMongoAuditing
+public class Main {
+    public static void main(String[] args) {
+
+        SpringApplication.run(Main.class, args);
+        System.out.println("test=========");
+    }
+}
+
+---------------------------------------------------------- 
+
+# 참고
+mavenLocal이용하기 https://velog.io/@haerong22/Gradle-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EB%A7%8C%EB%93%A4%EA%B3%A0-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0Maven-Local-Repository#3-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
